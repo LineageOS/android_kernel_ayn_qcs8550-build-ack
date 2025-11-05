@@ -1,0 +1,6 @@
+[
+ {
+   "repository": "android_kernel_ayn_kernel-ack",
+   "target_path": "vendor/ayn/kernel",
+ }
+]
