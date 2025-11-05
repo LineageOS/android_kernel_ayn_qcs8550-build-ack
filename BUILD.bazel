@@ -4,7 +4,10 @@ load("@rules_pkg//pkg:install.bzl", "pkg_install")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 load(
     "//build/kernel/kleaf:kernel.bzl",
+    "kernel_abi",
     "kernel_build",
+    "kernel_module_group",
+    "kernel_modules_install",
 )
 
 _QCS8550_MODULES_LIST = [
@@ -184,6 +187,7 @@ kernel_build(
     # Enable mixed build.
     base_kernel = "//vendor/ayn/kernel:kernel_aarch64",
     collect_unstripped_modules = True,
+    ddk_module_headers = ["//vendor/ayn/kernel:all_headers_aarch64"],
     defconfig = "//vendor/ayn/kernel:arch/arm64/configs/gki_defconfig",
     kmi_symbol_list = "//vendor/ayn/kernel:gki/aarch64/symbols/ayn",
     make_goals = [
@@ -196,10 +200,50 @@ kernel_build(
     visibility = ["//vendor/ayn:__subpackages__"],
 )
 
+kernel_module_group(
+    name = "external_modules",
+    srcs = [
+        "//vendor/ayn/modules:odin2mini-backlight",
+        "//vendor/ayn/modules:rsinput",
+        "//vendor/ayn/modules:leds-htr3212",
+        "//vendor/ayn/modules:panel-synaptics-td4328",
+        "//vendor/ayn/modules:panel-boe-xm91080g",
+        "//vendor/ayn/modules:panel-chipone-icna35xx",
+        "//vendor/ayn/modules:panel-ddic-ch13726a",
+        "//vendor/ayn/modules:pwm-sn3112",
+        "//vendor/ayn/modules:bootloader_log",
+    ],
+)
+
+kernel_modules_install(
+    name = "modules_install",
+    kernel_build = ":kernel_aarch64_qcs8550",
+    outs = [ "modules.dep", "modules.alias", ],
+    kernel_modules = [
+        ":external_modules",
+    ],
+)
+
+# No external module has uapi
+pkg_files(
+    name = "uapi_headers_dist_files",
+    srcs = [
+        ":kernel_aarch64_qcs8550_uapi_headers",
+    ],
+    strip_prefix = strip_prefix.files_only(),
+)
+pkg_install(
+    name = "qcs8550_uapi_headers_dist",
+    srcs = [":uapi_headers_dist_files"],
+    destdir = "out/ayn_qcs8550/dist",
+)
+
 pkg_files(
     name = "qcs8550_dist_files",
     srcs = [
         ":kernel_aarch64_qcs8550",
+        ":modules_install",
+        ":uapi_headers_dist_files",
         "//vendor/ayn/qcs8550-devicetrees:dtbs",
         "//vendor/ayn/qcs8550-devicetrees:dtbos",
         "//vendor/ayn/qcs8550-devicetrees:dtbo_verifications",
@@ -214,4 +258,10 @@ pkg_install(
     name = "qcs8550_dist",
     srcs = [":qcs8550_dist_files"],
     destdir = "out/ayn_qcs8550/dist",
+)
+
+kernel_abi(
+    name = "qcs8550_abi",
+    kernel_build = ":kernel_aarch64_qcs8550",
+    kernel_modules = [":external_modules"],
 )
