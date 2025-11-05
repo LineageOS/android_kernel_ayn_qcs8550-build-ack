@@ -2,5 +2,9 @@
  {
    "repository": "android_kernel_ayn_kernel-ack",
    "target_path": "vendor/ayn/kernel",
+ },
+ {
+   "repository": "android_kernel_ayn_qcs8550-devicetrees-ack",
+   "target_path": "vendor/ayn/qcs8550-devicetrees"
  }
 ]
