@@ -199,6 +199,9 @@ pkg_files(
     name = "qcs8550_dist_files",
     srcs = [
         ":kernel_aarch64_qcs8550",
+        "//vendor/ayn/qcs8550-devicetrees:dtbs",
+        "//vendor/ayn/qcs8550-devicetrees:dtbos",
+        "//vendor/ayn/qcs8550-devicetrees:dtbo_verifications",
         # Mixed build: Additional GKI artifacts.
         "//vendor/ayn/kernel:kernel_aarch64",
         "//vendor/ayn/kernel:kernel_aarch64_modules",
