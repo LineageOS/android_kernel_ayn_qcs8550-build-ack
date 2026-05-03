@@ -1,7 +1,7 @@
 [
  {
    "repository": "android_kernel_ayn_kernel-ack",
-   "target_path": "kernel/platform/kernel-6.18/vendor/ayn/kernel",
+   "target_path": "kernel/platform/kernel-6.18/vendor/ayn/kernel"
  },
  {
    "repository": "android_kernel_ayn_modules-ack",
