@@ -208,6 +208,7 @@ kernel_module_group(
         "//vendor/ayn/modules:leds-htr3212",
         "//vendor/ayn/modules:panel-chipone-icna35xx",
         "//vendor/ayn/modules:panel-chipwealth-ch13726a",
+        "//vendor/ayn/modules:panel-ilitek-ili7836a",
         "//vendor/ayn/modules:panel-synaptics-td4328",
         "//vendor/ayn/modules:panel-visionox-vtdr6130",
         "//vendor/ayn/modules:panel-xiamen-xm91080",
